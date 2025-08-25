@@ -1,0 +1,2 @@
+# pure_bash_coverage
+pure_bash_coverage
