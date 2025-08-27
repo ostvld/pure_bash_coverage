@@ -6,11 +6,11 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-report_file="$1"
+log_file="$1"
 script_file="$2"
 
 # Проверка файлов
-if [ ! -f "$report_file" ] || [ ! -f "$script_file" ]; then
+if [ ! -f "$log_file" ] || [ ! -f "$script_file" ]; then
     echo "Ошибка: Один из файлов не найден"
     exit 2
 fi
@@ -91,6 +91,6 @@ END {
     print "</body>"
     print "</html>"
 }
-' "$report_file" "$script_file" > coverage_report.html
+' "$log_file" "$script_file" > coverage_report.html
 
 echo "Отчет создан: coverage_report.html"
