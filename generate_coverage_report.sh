@@ -1,16 +1,18 @@
 #!/bin/bash
 
 # Проверка аргументов
-if [ $# -ne 2 ]; then
-    echo "Использование: $0 <report.log> <bash-code.sh>"
+if [ $# -ne 1 ]; then
+    echo "Использование: $0 <bash-code.sh>"
     exit 1
 fi
 
-report_file="$1"
-script_file="$2"
+log_file="${PWD}/coverage.log"
+script_file="$1"
+
+${script_file} &> ${log_file}
 
 # Проверка файлов
-if [ ! -f "$report_file" ] || [ ! -f "$script_file" ]; then
+if [ ! -f "$log_file" ] || [ ! -f "$script_file" ]; then
     echo "Ошибка: Один из файлов не найден"
     exit 2
 fi
@@ -91,6 +93,6 @@ END {
     print "</body>"
     print "</html>"
 }
-' "$report_file" "$script_file" > coverage_report.html
+' "$log_file" "$script_file" > ${PWD}/coverage_report.html
 
 echo "Отчет создан: coverage_report.html"
