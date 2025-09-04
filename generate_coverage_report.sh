@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#SPDX-FileCopyrightText: Copyright (c) 2024-2025
+# SPDX-License-Identifier: MIT
 # Проверка аргументов
 if [ $# -ne 1 ]; then
     echo "Использование: $0 <bash-code.sh>"
