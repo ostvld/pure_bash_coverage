@@ -1,5 +1,5 @@
 #!/bin/bash
-#SPDX-FileCopyrightText: Copyright (c) 2024-2025
+# SPDX-FileCopyrightText: Copyright (c) 2024-2025 Zerocracy
 # SPDX-License-Identifier: MIT
 # Проверка аргументов
 if [ $# -ne 1 ]; then
