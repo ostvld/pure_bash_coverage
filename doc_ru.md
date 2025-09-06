@@ -1,5 +1,3 @@
-# SPDX-FileCopyrightText: Copyright (c) 2024-2025 Zerocracy
-# SPDX-License-Identifier: MIT
 # PureBashCoverage
 
 Чистый, самодостаточный инструмент для оценки покрытия тестами Bash-скриптов — без зависимостей от других языков.
