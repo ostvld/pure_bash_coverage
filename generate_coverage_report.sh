@@ -1,9 +1,9 @@
 #!/bin/bash
 # SPDX-FileCopyrightText: Copyright (c) 2024-2025 Zerocracy
 # SPDX-License-Identifier: MIT
-# Проверка аргументов
+# Argument check
 if [ $# -ne 1 ]; then
-    echo "Использование: $0 <bash-code.sh>"
+    echo "Usage: $0 <bash-code.sh>"
     exit 1
 fi
 
@@ -12,23 +12,23 @@ script_file="$1"
 
 ${script_file} &> ${log_file}
 
-# Проверка файлов
+# File check
 if [ ! -f "$log_file" ] || [ ! -f "$script_file" ]; then
-    echo "Ошибка: Один из файлов не найден"
+    echo "Error: One of the files was not found"
     exit 2
 fi
 
-# Получаем базовое имя скрипта
+# Get script basename
 script_basename=$(basename "$script_file")
 total_lines=$(wc -l < "$script_file")
 
-# Генерируем HTML отчет
+# Generate HTML report
 awk -v total_lines="$total_lines" -v script_basename="$script_basename" '
 BEGIN {
     print "<!DOCTYPE html>"
     print "<html>"
     print "<head>"
-    print "<title>Отчет о покрытии кода</title>"
+    print "<title>Code Coverage Report</title>"
     print "<style>"
     print "body { font-family: monospace; }"
     print ".covered { background-color: #dfd; }"
@@ -46,8 +46,8 @@ BEGIN {
 }
 
 NR == FNR {
-    # Обрабатываем report.log - ИЗМЕНЕНО для формата: ++./scripts/filename:linenumber:command
-    # Ищем строки, которые содержат имя файла с любым путем перед ним
+    # Process report.log - MODIFIED for format: ++./scripts/filename:linenumber:command
+    # Look for lines that contain the filename with any path before it
     if (match($0, "^[+]+.*/" script_basename ":([0-9]+):", matches)) {
         line = matches[1]
         coverage[line] = 1
@@ -58,19 +58,19 @@ NR == FNR {
 
 FNR == 1 {
     percent_covered = (total_lines == 0) ? 100 : (covered_count * 100) / total_lines
-    printf "<h1>Отчет о покрытии кода для %s</h1>\n", script_basename
-    printf "<p>Общее строк: %d</p>\n", total_lines
-    printf "<p>Покрыто строк: %d</p>\n", covered_count
-    printf "<p>Процент покрытия: %.2f%%</p>\n", percent_covered
+    printf "<h1>Code Coverage Report for %s</h1>\n", script_basename
+    printf "<p>Total lines: %d</p>\n", total_lines
+    printf "<p>Covered lines: %d</p>\n", covered_count
+    printf "<p>Coverage percentage: %.2f%%</p>\n", percent_covered
     print "<table>"
-    print "<tr><th>Строка</th><th>Счетчик</th><th>Код</th></tr>"
+    print "<tr><th>Line</th><th>Count</th><th>Code</th></tr>"
 }
 
 {
     line_num = FNR
     count = coverage[line_num] ? coverage[line_num] : 0
 
-    # Экранирование HTML
+    # HTML escaping
     code = $0
     gsub(/&/, "\\&amp;", code)
     gsub(/</, "\\&lt;", code)
@@ -96,4 +96,4 @@ END {
 }
 ' "$log_file" "$script_file" > ${PWD}/coverage_report.html
 
-echo "Отчет создан: coverage_report.html"
+echo "Report created: coverage_report.html"
